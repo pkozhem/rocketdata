@@ -27,7 +27,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
 
-    'src.users'
+    'src.users',
+    'src.entities',
+    'src.products'
 ]
 
 
@@ -154,7 +156,7 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'
 
 LOGIN_REDIRECT_URL = '/'
 
