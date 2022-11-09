@@ -6,10 +6,22 @@ from src.entities.models import Entity, Contacts, Address
 class EntityAdmin(admin.ModelAdmin):
     """ Configuring display list, search fields and filter list of Entity model in Admin panel. """
 
-    list_display = ('name', 'type', 'debt', 'date_created', 'get_city')
-    search_fields = ('name', 'type', 'date_created', 'contacts__address__city')
+    list_display = ('name', 'type', 'provider', 'debt', 'date_created', 'get_city')
+    search_fields = ('name', 'type', 'provider', 'date_created', 'contacts__address__city')
     list_filter = ('contacts__address__city',)
     actions = ('make_debt_zero',)
+
+    def save_model(self, request, obj, form, change):
+        """ Makes unavailable to specify a provider if it's lower or equal in the hierarchy. """
+
+        if obj.type <= obj.provider.type:
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, "Cannot specify a provider if it's lower in the hierarchy.")
+        else:
+            obj.save()
+            super().save_model(request, obj, form, change)
+
+        return
 
     @admin.action(description="Make selected entities' debt as 0")
     def make_debt_zero(self, request, queryset):

@@ -5,15 +5,15 @@ class Entity(models.Model):
     """ Entity model. """
 
     TYPES = (
-        ('Factory', 'Factory'),
-        ('Distributor', 'Distributor'),
-        ('Dealership', 'Dealership'),
-        ('Retail network', 'Retail network'),
-        ('Entrepreneur', 'Entrepreneur')
+        (0, 'Factory'),
+        (1, 'Distributor'),
+        (2, 'Dealership'),
+        (3, 'Retail network'),
+        (4, 'Entrepreneur')
     )
-    type = models.CharField(default='Entrepreneur', max_length=14, choices=TYPES)
+    type = models.PositiveSmallIntegerField(default=0, null=True, blank=True, choices=TYPES)
     name = models.CharField(blank=True, null=True, unique=True, max_length=256)
-    # provider = models.OneToOneField()
+    provider = models.ForeignKey('self', related_name='parent', null=True, blank=True, on_delete=models.SET_NULL)
     debt = models.DecimalField(default=0, null=True, blank=True, max_digits=9, decimal_places=2)
     date_created = models.DateTimeField(auto_now_add=True)
 
