@@ -7,7 +7,7 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
-    """ Configuring display list and search fields of Product model in Admin panel. """
+    """ Configuring User admin model. """
 
     list_display = UserAdmin.list_display + ('entity',)
     search_fields = UserAdmin.search_fields + ('entity__name',)
