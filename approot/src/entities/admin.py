@@ -10,12 +10,18 @@ class EntityAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'get_href', 'debt', 'date_created', 'get_city')
     search_fields = ('name', 'type', 'provider', 'date_created', 'contacts__address__city')
     list_filter = ('contacts__address__city',)
-    fields = ('type', 'name', 'provider', 'get_href', 'debt')
+    fields = ('type', 'name', 'provider', 'get_href', 'debt', 'products')
     readonly_fields = ('get_href',)
+    filter_horizontal = ('products',)
     actions = ('make_debt_zero',)
 
     def save_model(self, request, obj, form, change):
         """ Makes unavailable to specify a provider if it's lower or equal in the hierarchy. """
+
+        if obj.provider is None:
+            obj.save()
+            super().save_model(request, obj, form, change)
+            return
 
         if obj.type <= obj.provider.type:
             messages.set_level(request, messages.ERROR)
