@@ -14,7 +14,7 @@ class Entity(models.Model):
     )
     type = models.PositiveSmallIntegerField(default=0, null=True, blank=True, choices=TYPES)
     name = models.CharField(blank=True, null=True, unique=True, max_length=256)
-    products = models.ManyToManyField(Product, related_name='entity')
+    products = models.ManyToManyField(Product, related_name='entity', blank=True)
     provider = models.ForeignKey('self', related_name='parent', null=True, blank=True, on_delete=models.SET_NULL)
     debt = models.DecimalField(default=0, null=True, blank=True, max_digits=9, decimal_places=2)
     date_created = models.DateTimeField(auto_now_add=True)

@@ -1,0 +1,19 @@
+from django.urls import path
+from src.entities.views import (
+    EntityListAPIView,
+    EntityCountryAPIView,
+    EntityDebtGreaterThanAverage,
+    EntityByProductIDAPIView,
+    EntityCreateAPIView,
+    EntityUpdateDestroyAPIView
+)
+
+
+urlpatterns = [
+    path('all', EntityListAPIView.as_view()),
+    path('country', EntityCountryAPIView.as_view()),
+    path('debt', EntityDebtGreaterThanAverage.as_view()),
+    path('product', EntityByProductIDAPIView.as_view()),
+    path('create', EntityCreateAPIView.as_view()),
+    path('<int:pk>', EntityUpdateDestroyAPIView.as_view())
+]
