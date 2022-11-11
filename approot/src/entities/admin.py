@@ -52,7 +52,7 @@ class EntityAdmin(admin.ModelAdmin):
                 f"</a>"
             )
 
-    def get_city(self, obj):
+    def get_city(self, obj) -> str:
         """ Returns entity's city from Address model. """
 
         return obj.contacts.address.city
