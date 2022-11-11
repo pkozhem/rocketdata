@@ -53,7 +53,7 @@ class EntitySerializer(WritableNestedModelSerializer):
     def get_provider_type(self) -> int or None:
         """ Returns Entity provider's type, None if it doesn't exist. """
 
-        provider_name = self.validated_data.get('provider')
+        provider_name: str or None = self.validated_data.get('provider')
 
         return None if provider_name is None \
             else list(Entity.objects.filter(name=provider_name).values('type'))[0].get('type')
@@ -66,7 +66,7 @@ class EntitySerializer(WritableNestedModelSerializer):
 
         return attrs
 
-    def create(self, validated_data) -> Entity:
+    def create(self, validated_data):
         """ Overwritten save method. Validates or not entity's/provider's type. """
 
         provider_type = self.get_provider_type()
@@ -81,7 +81,7 @@ class EntitySerializer(WritableNestedModelSerializer):
         entity = super(EntitySerializer, self).create(validated_data)
         return entity
 
-    def update(self, instance, validated_data) -> Entity:
+    def update(self, instance, validated_data):
         """ Overwritten update method. Validates or not entity's/provider's type. """
 
         provider_type = self.get_provider_type()
