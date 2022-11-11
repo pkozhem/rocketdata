@@ -7,7 +7,7 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
-    """ Configuring User admin model. """
+    """ Configuration for User admin model. """
 
     list_display = UserAdmin.list_display + ('entity',)
     search_fields = UserAdmin.search_fields + ('entity__name',)

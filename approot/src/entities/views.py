@@ -9,7 +9,7 @@ from src.core.views import UpdateDestroyAPIView
 
 
 class EntityListAPIView(ListAPIView):
-    """ 4.1. Returns list of all Entities and theirs data. """
+    """ Returns list of all Entities and theirs data. """
 
     permission_classes = [AllowAny]
     serializer_class = EntitySerializer
@@ -20,7 +20,7 @@ class EntityListAPIView(ListAPIView):
 
 
 class EntityCountryAPIView(APIView):
-    """ 4.2. Returns Entities by Address country which is entered in url params like .../country?name={string} """
+    """ Returns Entities by Address country which is entered in url params like .../country?name={string} """
 
     permission_classes = [AllowAny]
 
@@ -37,7 +37,7 @@ class EntityCountryAPIView(APIView):
 
 
 class EntityDebtGreaterThanAverage(APIView):
-    """ 4.3. Returns Entities with debt more than average debt among all Entities. """
+    """ Returns Entities with debt more than average debt among all Entities. """
 
     permission_classes = [AllowAny]
 
@@ -52,7 +52,7 @@ class EntityDebtGreaterThanAverage(APIView):
 
 
 class EntityByProductIDAPIView(APIView):
-    """ 4.4. Returns Entities by Product id which is entered url params like .../product?id={int} """
+    """ Returns Entities by Product id which is entered url params like .../product?id={int} """
 
     permission_classes = [AllowAny]
 
@@ -69,7 +69,7 @@ class EntityByProductIDAPIView(APIView):
 
 
 class EntityCreateAPIView(CreateAPIView):
-    """ 4.5. Entity create API view. """
+    """ Entity create API view. """
 
     permission_classes = [AllowAny]
     serializer_class = EntitySerializer
@@ -80,7 +80,7 @@ class EntityCreateAPIView(CreateAPIView):
 
 
 class EntityUpdateDestroyAPIView(UpdateDestroyAPIView):
-    """ 4.5 - 4.6. Entity UD API View. """
+    """ Entity UD API View. """
 
     permission_classes = [AllowAny]
     serializer_class = EntitySerializer

@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from src.products.models import Product
 
 
@@ -14,7 +15,7 @@ class Entity(models.Model):
     )
     type = models.PositiveSmallIntegerField(default=0, null=True, blank=True, choices=TYPES)
     name = models.CharField(blank=True, null=True, unique=True, max_length=256)
-    products = models.ManyToManyField(Product, related_name='entity', blank=True)
+    products = models.ManyToManyField(Product, default=None, related_name='entity', blank=True)
     provider = models.ForeignKey('self', related_name='parent', null=True, blank=True, on_delete=models.SET_NULL)
     debt = models.DecimalField(default=0, null=True, blank=True, max_digits=9, decimal_places=2)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -23,12 +24,23 @@ class Entity(models.Model):
         verbose_name = 'Entity'
         verbose_name_plural = 'Entities'
 
+    def clean(self):
+        """ Overwritten clean method. Validates or not entity's/provider's type. """
+
+        if self.provider is None:
+            super().clean()
+            return
+
+        if self.type <= self.provider.type:
+            raise ValidationError("Cannot specify a provider if it's lower or equal in the hierarchy.")
+        super().clean()
+
     def __str__(self):
         return f'{self.name}'
 
 
 class Contacts(models.Model):
-    """ Contacts model. One to one field to Entity instance. """
+    """ Contacts model. """
 
     email = models.EmailField(blank=True, null=True, unique=True, max_length=256)
     entity = models.OneToOneField(Entity, related_name='contacts', on_delete=models.CASCADE)
@@ -42,7 +54,7 @@ class Contacts(models.Model):
 
 
 class Address(models.Model):
-    """ Address model. One to one field to Contacts instance. """
+    """ Address model. """
 
     country = models.CharField(default='Belarus', null=True, blank=True, max_length=56)
     city = models.CharField(default='Minsk', null=True, blank=True, max_length=85)

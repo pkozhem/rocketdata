@@ -5,14 +5,11 @@ User = get_user_model()
 
 
 class UserPrivateSerializer(serializers.ModelSerializer):
+    """ Private User serializer. """
+
     class Meta:
         model = User
-        exclude = (
-            "last_login",
-            "is_active",
-            "is_staff",
-            "is_superuser"
-        )
+        fields = '__all__'
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
@@ -20,4 +17,10 @@ class UserPublicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('id', 'username', 'is_active')
+        extra_kwargs = {
+            "username":
+                {
+                    "read_only": True
+                }
+        }

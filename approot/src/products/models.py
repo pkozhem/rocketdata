@@ -6,7 +6,7 @@ class Product(models.Model):
 
     name = models.CharField(null=True, blank=True, max_length=256)
     model = models.CharField(null=True, blank=True, max_length=128)
-    date_release = models.DateField()
+    date_release = models.DateField(null=True, blank=True)
 
     class Meta:
         verbose_name = 'Product'

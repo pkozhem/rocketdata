@@ -5,7 +5,7 @@ from src.entities.models import Entity, Contacts, Address
 
 
 class EntityAdmin(admin.ModelAdmin):
-    """ Configuring Entity admin model. """
+    """ Configuration for Entity admin model. """
 
     list_display = ('name', 'type', 'get_href', 'debt', 'date_created', 'get_city')
     search_fields = ('name', 'type', 'provider', 'date_created', 'contacts__address__city')
@@ -16,18 +16,17 @@ class EntityAdmin(admin.ModelAdmin):
     actions = ('make_debt_zero',)
 
     def save_model(self, request, obj, form, change):
-        """ Makes unavailable to specify a provider if it's lower or equal in the hierarchy. """
+        """ Overwritten save_model method. Validates or not entity's/provider's type. """
 
         if obj.provider is None:
-            obj.save()
             super().save_model(request, obj, form, change)
             return
 
-        if obj.type <= obj.provider.type:
+        elif obj.type <= obj.provider.type:
             messages.set_level(request, messages.ERROR)
-            messages.error(request, "Cannot specify a provider if it's lower in the hierarchy.")
+            messages.error(request, "Cannot specify a provider if it's lower or equal in the hierarchy.")
+
         else:
-            obj.save()
             super().save_model(request, obj, form, change)
 
         return
@@ -64,14 +63,14 @@ class EntityAdmin(admin.ModelAdmin):
 
 
 class ContactsAdmin(admin.ModelAdmin):
-    """ Configuring Contacts admin model. """
+    """ Configuration for Contacts admin model. """
 
     list_display = ('entity', 'email')
     search_fields = ('entity', 'email', 'address__city')
 
 
 class AddressAdmin(admin.ModelAdmin):
-    """ Configuring Address admin model. """
+    """ Configuration for Address admin model. """
 
     list_display = ('contacts', 'country', 'city', 'street', 'house')
     search_fields = ('contacts', 'country', 'city', 'street', 'house')
