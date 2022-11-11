@@ -51,7 +51,7 @@ class EntitySerializer(WritableNestedModelSerializer):
             }
         }
 
-    def get_provider_typ(self) -> int or None:
+    def get_provider_type(self) -> int or None:
         """ Returns Entity provider's type, None if it doesn't exist. """
 
         provider_name: str or None = self.validated_data.get('provider')
@@ -65,13 +65,13 @@ class EntitySerializer(WritableNestedModelSerializer):
     def create(self, validated_data) -> Entity:
         """ Overwritten save method. Validates or not entity's/provider's type. """
 
-        provider_id = self.get_provider_typ()
+        provider_type = self.get_provider_type()
 
-        if provider_id is None:
+        if provider_type is None:
             entity = super(EntitySerializer, self).create(validated_data)
             return entity
 
-        elif validated_data.get('type') <= provider_id:
+        elif validated_data.get('type') <= provider_type:
             raise ValidationError({"detail": "Cannot specify a provider if it's lower or equal in the hierarchy."})
 
         entity = super(EntitySerializer, self).create(validated_data)
@@ -80,14 +80,14 @@ class EntitySerializer(WritableNestedModelSerializer):
     def update(self, instance, validated_data) -> Entity:
         """ Overwritten update method. Validates or not entity's/provider's type. """
 
-        provider_id = self.get_provider_typ()
+        provider_type = self.get_provider_type()
 
-        if provider_id is None:
+        if provider_type is None:
             instance.provider = None
             instance = super(EntitySerializer, self).update(instance, validated_data)
             return instance
 
-        elif validated_data.get('type') <= provider_id:
+        elif validated_data.get('type') <= provider_type:
             raise ValidationError({"detail": "Cannot specify a provider if it's lower in the hierarchy."})
 
         instance = super(EntitySerializer, self).update(instance, validated_data)

@@ -11,6 +11,7 @@ from src.core.views import UpdateDestroyAPIView
 class EntityListAPIView(ListAPIView):
     """ Returns list of all Entities and theirs data. """
 
+    # permission_classes = [AllowAny]
     serializer_class = EntitySerializer
 
     def get_queryset(self):
