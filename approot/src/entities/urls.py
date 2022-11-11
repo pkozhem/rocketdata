@@ -5,7 +5,8 @@ from src.entities.views import (
     EntityDebtGreaterThanAverage,
     EntityByProductIDAPIView,
     EntityCreateAPIView,
-    EntityUpdateDestroyAPIView
+    EntityUpdateDestroyAPIView,
+    ContactsQRCode
 )
 
 
@@ -15,5 +16,6 @@ urlpatterns = [
     path('debt', EntityDebtGreaterThanAverage.as_view()),
     path('product', EntityByProductIDAPIView.as_view()),
     path('create', EntityCreateAPIView.as_view()),
-    path('<int:pk>', EntityUpdateDestroyAPIView.as_view())
+    path('<int:pk>', EntityUpdateDestroyAPIView.as_view()),
+    path('qrcode/<int:pk>', ContactsQRCode.as_view())
 ]

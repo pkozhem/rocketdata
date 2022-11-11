@@ -7,6 +7,7 @@ __pycache__/
 *.so
 
 # Self .gitignore
+approot/src/entities/qrcodes/*
 
 # Distribution / packaging
 .Python

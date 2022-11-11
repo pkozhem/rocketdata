@@ -2,9 +2,10 @@ from django.db.models import Avg
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, CreateAPIView
-from src.entities.models import Entity
-from src.entities.serializers import EntitySerializer
+from src.entities.models import Entity, Contacts
+from src.entities.serializers import EntitySerializer, ContactsSerializer
 from src.core.views import UpdateDestroyAPIView
+from src.core.functions import make_qrcode
 
 
 class EntityListAPIView(ListAPIView):
@@ -78,3 +79,13 @@ class EntityUpdateDestroyAPIView(UpdateDestroyAPIView):
     def get_queryset(self):
         return Entity.objects.select_related('contacts', 'contacts__address', 'provider') \
             .prefetch_related('products', 'user').filter(id=self.kwargs['pk'])
+
+
+class ContactsQRCode(APIView):
+    """ Generates QR Code by Entity's address. """
+
+    def get(self, request, pk):
+        queryset = Contacts.objects.filter(entity=self.kwargs['pk'])
+        serializer = ContactsSerializer(queryset, many=True)
+        make_qrcode(serializer.data[0], pk)
+        return Response(serializer.data[0])
