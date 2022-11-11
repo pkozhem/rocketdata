@@ -11,7 +11,6 @@ from src.core.views import UpdateDestroyAPIView
 class EntityListAPIView(ListAPIView):
     """ Returns list of all Entities and theirs data. """
 
-    permission_classes = [AllowAny]
     serializer_class = EntitySerializer
 
     def get_queryset(self):
@@ -21,8 +20,6 @@ class EntityListAPIView(ListAPIView):
 
 class EntityCountryAPIView(APIView):
     """ Returns Entities by Address country which is entered in url params like .../country?name={string} """
-
-    permission_classes = [AllowAny]
 
     def get(self, request):
         country_name = request.query_params.get('name')
@@ -39,8 +36,6 @@ class EntityCountryAPIView(APIView):
 class EntityDebtGreaterThanAverage(APIView):
     """ Returns Entities with debt more than average debt among all Entities. """
 
-    permission_classes = [AllowAny]
-
     def get(self, request):
         base_queryset = Entity.objects.select_related('contacts', 'contacts__address', 'provider') \
             .prefetch_related('products', 'user')
@@ -53,8 +48,6 @@ class EntityDebtGreaterThanAverage(APIView):
 
 class EntityByProductIDAPIView(APIView):
     """ Returns Entities by Product id which is entered url params like .../product?id={int} """
-
-    permission_classes = [AllowAny]
 
     def get(self, request):
         product_id = request.query_params.get('id')
@@ -71,7 +64,6 @@ class EntityByProductIDAPIView(APIView):
 class EntityCreateAPIView(CreateAPIView):
     """ Entity create API view. """
 
-    permission_classes = [AllowAny]
     serializer_class = EntitySerializer
 
     def get_queryset(self):
@@ -82,7 +74,6 @@ class EntityCreateAPIView(CreateAPIView):
 class EntityUpdateDestroyAPIView(UpdateDestroyAPIView):
     """ Entity UD API View. """
 
-    permission_classes = [AllowAny]
     serializer_class = EntitySerializer
 
     def get_queryset(self):

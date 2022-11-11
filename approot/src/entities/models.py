@@ -24,7 +24,7 @@ class Entity(models.Model):
         verbose_name = 'Entity'
         verbose_name_plural = 'Entities'
 
-    def clean(self):
+    def clean(self) -> None:
         """ Overwritten clean method. Validates or not entity's/provider's type. """
 
         if self.provider is None:

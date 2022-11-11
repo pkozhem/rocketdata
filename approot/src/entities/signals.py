@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 @receiver(post_save, sender=Entity)
-def create_contacts_and_address(sender, instance, created, **kwargs):
+def create_contacts_and_address(sender, instance, created, **kwargs) -> None:
     """ Auto create Contacts and Address when Entity is created. """
 
     if created:
@@ -16,7 +16,7 @@ def create_contacts_and_address(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Entity)
-def create_contacts_and_address(sender, instance, **kwargs):
+def create_contacts_and_address(sender, instance, **kwargs) -> None:
     """ Saves incoming data for Contacts and Address instantly . """
 
     instance.contacts.save()

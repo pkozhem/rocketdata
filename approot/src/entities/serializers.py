@@ -62,7 +62,7 @@ class EntitySerializer(WritableNestedModelSerializer):
         provider_type: int = list(Entity.objects.filter(name=provider_name).values('type'))[0].get('type')
         return provider_type
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> Entity:
         """ Overwritten save method. Validates or not entity's/provider's type. """
 
         provider_id = self.get_provider_typ()

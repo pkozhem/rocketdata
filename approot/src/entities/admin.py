@@ -15,7 +15,7 @@ class EntityAdmin(admin.ModelAdmin):
     filter_horizontal = ('products',)
     actions = ('make_debt_zero',)
 
-    def save_model(self, request, obj, form, change):
+    def save_model(self, request, obj, form, change) -> None:
         """ Overwritten save_model method. Validates or not entity's/provider's type. """
 
         if obj.provider is None:
@@ -32,7 +32,7 @@ class EntityAdmin(admin.ModelAdmin):
         return
 
     @admin.action(description="Make selected entities' debt as 0")
-    def make_debt_zero(self, request, queryset):
+    def make_debt_zero(self, request, queryset) -> None:
         """ Admin action which makes selected entities' debts as 0. """
 
         updated = queryset.update(debt=0.00)
@@ -42,7 +42,7 @@ class EntityAdmin(admin.ModelAdmin):
             updated,
         ) % updated, messages.SUCCESS)
 
-    def get_href(self, obj):
+    def get_href(self, obj) -> mark_safe or None:
         """ Creates new element of field list, contains href to entity's provider. """
 
         if obj.provider:
