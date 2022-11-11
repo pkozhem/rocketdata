@@ -7,11 +7,11 @@ from src.entities.models import Entity, Contacts, Address
 class EntityAdmin(admin.ModelAdmin):
     """ Configuration for Entity admin model. """
 
-    list_display = ('name', 'type', 'get_href', 'debt', 'date_created', 'get_city')
-    search_fields = ('name', 'type', 'provider', 'date_created', 'contacts__address__city')
+    list_display = ('name', 'id', 'type', 'get_href', 'debt', 'date_created', 'get_city')
+    search_fields = ('name', 'id', 'type', 'provider', 'date_created', 'contacts__address__city')
     list_filter = ('contacts__address__city',)
-    fields = ('type', 'name', 'provider', 'get_href', 'debt', 'products')
-    readonly_fields = ('get_href',)
+    fields = ('name', 'type', 'provider', 'get_href', 'debt', 'products', 'date_created')
+    readonly_fields = ('get_href', 'date_created')
     filter_horizontal = ('products',)
     actions = ('make_debt_zero',)
 

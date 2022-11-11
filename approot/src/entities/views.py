@@ -1,5 +1,4 @@
 from django.db.models import Avg
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, CreateAPIView
@@ -11,7 +10,6 @@ from src.core.views import UpdateDestroyAPIView
 class EntityListAPIView(ListAPIView):
     """ Returns list of all Entities and theirs data. """
 
-    # permission_classes = [AllowAny]
     serializer_class = EntitySerializer
 
     def get_queryset(self):

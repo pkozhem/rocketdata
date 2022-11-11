@@ -29,7 +29,7 @@ class EntitySerializer(WritableNestedModelSerializer):
     """ Entity serializer. Makes possible updating and creating nested. """
 
     contacts = ContactsSerializer(many=False, required=False)
-    products = ProductSerializer(many=True, required=False)
+    products = ProductSerializer(many=True, required=False, read_only=True)
     user = UserPublicSerializer(many=True, required=False)
 
     class Meta:
@@ -37,8 +37,7 @@ class EntitySerializer(WritableNestedModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             "type": {
-                "required": True,
-                "read_only": False
+                "required": True
             },
             "name": {
                 "required": True
@@ -54,13 +53,18 @@ class EntitySerializer(WritableNestedModelSerializer):
     def get_provider_type(self) -> int or None:
         """ Returns Entity provider's type, None if it doesn't exist. """
 
-        provider_name: str or None = self.validated_data.get('provider')
+        provider_name = self.validated_data.get('provider')
 
-        if provider_name is None:
-            return None
+        return None if provider_name is None \
+            else list(Entity.objects.filter(name=provider_name).values('type'))[0].get('type')
 
-        provider_type: int = list(Entity.objects.filter(name=provider_name).values('type'))[0].get('type')
-        return provider_type
+    def validate(self, attrs):
+        """ Validates or not incoming name length. """
+
+        if len(attrs['name']) > 50:
+            raise ValidationError({"detail": "Entity's name should contains maximum 50 symbols."})
+
+        return attrs
 
     def create(self, validated_data) -> Entity:
         """ Overwritten save method. Validates or not entity's/provider's type. """
