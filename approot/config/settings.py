@@ -154,6 +154,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'src/entities/static'
+]
+
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'users.User'

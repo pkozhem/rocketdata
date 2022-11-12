@@ -29,7 +29,7 @@ class EntitySerializer(WritableNestedModelSerializer):
     """ Entity serializer. Makes possible updating and creating nested. """
 
     contacts = ContactsSerializer(many=False, required=False)
-    products = ProductSerializer(many=True, required=False, read_only=True)
+    products = ProductSerializer(many=True, required=False)
     user = UserPublicSerializer(many=True, required=False)
 
     class Meta:

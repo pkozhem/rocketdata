@@ -24,5 +24,5 @@ def make_qrcode(serializer_data: OrderedDict, pk: int) -> None:
                     f'street: {data_list[3]}\n' \
                     f'house: {data_list[4]}\n'
 
-    img: qrcode = qrcode.make(data_str)
+    img: qrcode = qrcode.make(data_str.strip())
     img.save(os.path.join(BASE_DIR, f'src/entities/qrcodes/qrcode_{pk}.png'))
