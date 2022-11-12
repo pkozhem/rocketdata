@@ -8,7 +8,6 @@ __pycache__/
 
 # Self .gitignore
 approot/src/entities/qrcodes/*
-
 # Distribution / packaging
 .Python
 build/
