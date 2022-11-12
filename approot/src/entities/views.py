@@ -1,7 +1,7 @@
 from django.db.models import Avg
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListAPIView
 from src.entities.models import Entity, Contacts
 from src.entities.serializers import EntitySerializer, ContactsSerializer
 from src.core.views import UpdateDestroyAPIView
@@ -57,6 +57,16 @@ class EntityByProductIDAPIView(APIView):
 
         queryset = Entity.objects.select_related('contacts', 'contacts__address', 'provider') \
             .prefetch_related('products', 'user').filter(products__id=product_id).order_by('id')
+        serializer = EntitySerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class EntityRetrieveAPIView(APIView):
+    """ Entity retrieve API view. Returns Entity to which request user belongs """
+
+    def get(self, request):
+        queryset = Entity.objects.select_related('contacts', 'contacts__address', 'provider') \
+            .prefetch_related('products', 'user').filter(user=request.user)
         serializer = EntitySerializer(queryset, many=True)
         return Response(serializer.data)
 
