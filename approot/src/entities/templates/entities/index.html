@@ -1,0 +1,64 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Entities</title>
+    <script src="{% static 'entities/copy.js' %}"></script>
+</head>
+<body>
+
+{% if object_list %}
+{% for entity in object_list %}
+
+<p> Name: {{ entity.name }} </p>
+
+Contacts:
+<ul>
+<li> Email:
+    <span id="{{ entity.id }}">
+        {{ entity.contacts.email }}
+    </span>
+    <button onclick="copyEmail({{ entity.id }})">
+        Copy email
+    </button>
+</li>
+
+<li>
+Address:
+<ul>
+    <li> Country: {{ entity.contacts.address.country }} </li>
+    <li> City: {{ entity.contacts.address.city }} </li>
+    <li> Street: {{ entity.contacts.address.street }} </li>
+    <li> House: {{ entity.contacts.address.house }} </li>
+</ul>
+</li>
+
+</ul>
+
+Products:
+<ul>
+{% for detail in entity.products.all %}
+<li> {{ detail.name }} </li>
+{% endfor %}
+</ul>
+
+Employees:
+<ul>
+{% for detail in entity.user.all %}
+<li> {{ detail.username }} </li>
+{% endfor %}
+</ul>
+
+<p> Provider: {{ entity.provider }} </p>
+<p> Debt: {{ entity.debt }} </p>
+<p> Date created: {{ entity.date_created }} </p>
+
+<hr width="400" align="left">
+
+{% endfor %}
+{% endif %}
+</body>
+</html>
