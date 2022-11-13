@@ -75,6 +75,9 @@ class EntitySerializer(WritableNestedModelSerializer):
             entity = super(EntitySerializer, self).create(validated_data)
             return entity
 
+        elif validated_data.get('type') > 4:
+            raise ValidationError({"detail": "Enter valid type: [0, 4]."})
+
         elif validated_data.get('type') <= provider_type:
             raise ValidationError({"detail": "Cannot specify a provider if it's lower or equal in the hierarchy."})
 
@@ -90,6 +93,9 @@ class EntitySerializer(WritableNestedModelSerializer):
             instance.provider = None
             instance = super(EntitySerializer, self).update(instance, validated_data)
             return instance
+
+        elif validated_data.get('type') > 4:
+            raise ValidationError({"detail": "Enter valid type: [0, 4]."})
 
         elif validated_data.get('type') <= provider_type:
             raise ValidationError({"detail": "Cannot specify a provider if it's lower in the hierarchy."})

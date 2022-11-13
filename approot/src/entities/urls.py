@@ -2,7 +2,7 @@ from django.urls import path
 from src.entities.views import (
     EntityListAPIView,
     EntityCountryAPIView,
-    EntityDebtGreaterThanAverage,
+    EntityDebtGreaterThanAvgAPIView,
     EntityByProductIDAPIView,
     EntityRetrieveAPIView,
     EntityCreateAPIView,
@@ -14,7 +14,7 @@ from src.entities.views import (
 urlpatterns = [
     path('all', EntityListAPIView.as_view()),
     path('country', EntityCountryAPIView.as_view()),
-    path('debt', EntityDebtGreaterThanAverage.as_view()),
+    path('debt', EntityDebtGreaterThanAvgAPIView.as_view()),
     path('product', EntityByProductIDAPIView.as_view()),
     path('my', EntityRetrieveAPIView.as_view()),
     path('create', EntityCreateAPIView.as_view()),

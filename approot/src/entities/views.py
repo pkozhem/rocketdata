@@ -34,7 +34,7 @@ class EntityCountryAPIView(APIView):
         return Response(serializer.data)
 
 
-class EntityDebtGreaterThanAverage(APIView):
+class EntityDebtGreaterThanAvgAPIView(APIView):
     """ Returns Entities with debt more than average debt among all Entities. """
 
     def get(self, request):
