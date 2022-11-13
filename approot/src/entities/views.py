@@ -1,9 +1,10 @@
 from django.db.models import Avg
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import RetrieveAPIView, CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 from src.entities.models import Entity, Contacts
 from src.entities.serializers import EntitySerializer, ContactsSerializer
+from src.entities.tasks import send_email_worker
 from src.core.views import UpdateDestroyAPIView
 from src.core.functions import make_qrcode
 
@@ -98,4 +99,5 @@ class ContactsQRCode(APIView):
         queryset = Contacts.objects.filter(entity=self.kwargs['pk'])
         serializer = ContactsSerializer(queryset, many=True)
         make_qrcode(serializer.data[0], pk)
-        return Response(serializer.data[0])
+        send_email_worker.delay(request.user.email, pk)
+        return Response({"detail": "QR code has sent to your email."})
