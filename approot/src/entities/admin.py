@@ -2,6 +2,7 @@ from django.contrib import admin, messages
 from django.utils.safestring import mark_safe
 from django.utils.translation import ngettext
 from src.entities.models import Entity, Contacts, Address
+from src.entities.tasks import make_debt_zero_worker
 
 
 class EntityAdmin(admin.ModelAdmin):
@@ -33,7 +34,15 @@ class EntityAdmin(admin.ModelAdmin):
 
     @admin.action(description="Make selected entities' debt as 0")
     def make_debt_zero(self, request, queryset) -> None:
-        """ Admin action which makes selected entities' debts as 0. """
+        """
+        Admin action which makes selected entities' debts as 0.
+        If selected Entities >= 20 theirs debts will set to 0 async.
+        """
+
+        if queryset.count() >= 20:
+            make_debt_zero_worker.delay(list(queryset.values('id')))
+            self.message_user(request, "Selected debts were successfully marked as 0.", messages.SUCCESS)
+            return
 
         updated = queryset.update(debt=0.00)
         self.message_user(request, ngettext(

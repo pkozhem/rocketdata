@@ -6,15 +6,18 @@ from src.core.functions import send
 
 
 @app.task
-def send_email_worker(user_email, pk):
+def send_email_worker(user_email, pk) -> None:
     """ Celery task which calling send function. """
 
     send(user_email, pk)
 
 
 @app.task
-def increase_debt_beat():
-    """ Celery task which increases Entity's debt to provider by random value in range [5, 500]. """
+def increase_debt_beat() -> None:
+    """
+    Celery task which increases Entity's debt to provider by random value in range [5, 500].
+    Calling every 3 hours starting from midnight.
+    """
 
     for entity in Entity.objects.all():
         if entity.type == 0:
@@ -24,8 +27,11 @@ def increase_debt_beat():
 
 
 @app.task
-def decrease_debt_beat():
-    """ Celery task which decreases Entity's debt to provider by random value in range [100, 10 000]. """
+def decrease_debt_beat() -> None:
+    """
+    Celery task which decreases Entity's debt to provider by random value in range [100, 10 000].
+    Calling daily at 6:30 AM.
+    """
 
     for entity in Entity.objects.all():
         if entity.type == 0:
@@ -35,3 +41,12 @@ def decrease_debt_beat():
 
         if entity.debt < 0:
             entity.update(debt=0)
+
+
+@app.task
+def make_debt_zero_worker(instance_id_and_debt) -> None:
+    """ Updates Entities' debts to zero. """
+
+    for details in instance_id_and_debt:
+        for entity_id in details.values():
+            Entity.objects.filter(id=entity_id).update(debt=0.00)
