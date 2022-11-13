@@ -31,7 +31,7 @@ def make_qrcode(serializer_data: OrderedDict, pk: int) -> None:
     image.save(os.path.join(BASE_DIR, f'src/entities/qrcodes/qrcode_{pk}.png'))
 
 
-def send(user_email, pk):
+def send(user_email, pk) -> None:
     """ Sends email to request user with QR code image. """
 
     if user_email is None:
