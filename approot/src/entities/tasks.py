@@ -19,11 +19,7 @@ def increase_debt_beat() -> None:
     Calling every 3 hours starting from midnight.
     """
 
-    for entity in Entity.objects.all():
-        if entity.type == 0:
-            continue
-
-        entity.update(debt=F('debt') + round(uniform(1, 50), 2))
+    Entity.objects.exclude(type=0).update(debt=F('debt') + round(uniform(1, 50), 2))
 
 
 @app.task
@@ -33,14 +29,9 @@ def decrease_debt_beat() -> None:
     Calling daily at 6:30 AM.
     """
 
-    for entity in Entity.objects.all():
-        if entity.type == 0:
-            continue
-
-        entity.update(debt=F('debt') - round(uniform(100, 10000), 2))
-
-        if entity.debt < 0:
-            entity.update(debt=0)
+    entities = Entity.objects.exclude(type=0)
+    entities.update(debt=F('debt') - round(uniform(100, 10000), 2))
+    entities.filter(debt__lt=0).update(debt=0)
 
 
 @app.task
